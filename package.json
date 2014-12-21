@@ -1,0 +1,11 @@
+{
+  "name": "CarBrains",
+  "version": "0.0.1",
+  "description": "Arduino code for interfacing to an RC car usin the RX2 chip",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Adam Freeman",
+  "license": "MIT"
+}
