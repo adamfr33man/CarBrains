@@ -14,10 +14,18 @@
 #define HALF_SPEED 150
 #define FULL_SPEED 250
 
+#define DIRECTION_FORWARD  -1
+#define DIRECTION_NEUTRAL   0
+#define DIRECTION_BACKWARD  1
+
+#define DIRECTION_LEFT     -1
+#define DIRECTION_CENTER    0
+#define DIRECTION_RIGHT     1
+
 int serial_part = 0;
 
 int speed_y = 0; // 0 - 255
-int dir_y = 0; // -1, 0, 1 for backwards, stationary, forwards
+int dir_y = 0; // -1, 0, 1 for forwards, neutral, backwards
 
 int speed_x = 0; // 0 - 255
 int dir_x = 0; // -1, 0, 1 for left, center, right
@@ -39,7 +47,38 @@ void setup() {
 
 
 void loop() {
-  // Nothing to see here
+  // Set y direction and speed.
+  if(dir_y == DIRECTION_FORWARD) {
+    // Forward 
+    analogWrite(PIN_FORWARD, speed_y);
+    analogWrite(PIN_BACKWARD, STOP);
+  } else if (dir_y == DIRECTION_BACKWARD) {
+    // Backward
+    analogWrite(PIN_FORWARD, STOP);
+    analogWrite(PIN_BACKWARD, speed_y);    
+  } else {
+    // Stopped
+    analogWrite(PIN_FORWARD, STOP);
+    analogWrite(PIN_BACKWARD, STOP);
+  }
+  
+  // Set y direction and speed.
+  if(dir_x == DIRECTION_LEFT) {
+    // Forward 
+    analogWrite(PIN_RIGHT, STOP);
+    analogWrite(PIN_LEFT, speed_x);
+  } else if (dir_x == DIRECTION_RIGHT) {
+    // Backward
+    analogWrite(PIN_RIGHT, speed_x);
+    analogWrite(PIN_LEFT, STOP);    
+  } else {
+    // Stopped
+    analogWrite(PIN_RIGHT, STOP);
+    analogWrite(PIN_LEFT, STOP);
+  }
+
+  // Delay, may be too slow
+  delay(300);  
 }
 
 void serialEvent() {
@@ -50,34 +89,34 @@ void serialEvent() {
     switch (inChar) {
       case 'w':
         // Go Forward
-        analogWrite(PIN_FORWARD, HALF_SPEED);
-        analogWrite(PIN_BACKWARD, STOP);
+        speed_y = HALF_SPEED;
+        dir_y = DIRECTION_FORWARD;
         break;
 
       case 's':
         // Go Backward
-        analogWrite(PIN_FORWARD, STOP);
-        analogWrite(PIN_BACKWARD, HALF_SPEED);
+        speed_y = HALF_SPEED;
+        dir_y = DIRECTION_BACKWARD;
         break;
 
       case 'a':
         // Go Forward
-        analogWrite(PIN_LEFT, HALF_SPEED);
-        analogWrite(PIN_RIGHT, STOP);
+        speed_x = HALF_SPEED;
+        dir_x = DIRECTION_LEFT;
         break;
 
       case 'd':
         // Go Backward
-        analogWrite(PIN_LEFT, STOP);
-        analogWrite(PIN_RIGHT, HALF_SPEED);
+        speed_x = HALF_SPEED;
+        dir_x = DIRECTION_RIGHT;
         break;
 
       case 'f':
         // Stop
-        analogWrite(PIN_FORWARD, STOP);
-        analogWrite(PIN_BACKWARD, STOP);
-        analogWrite(PIN_LEFT, STOP);
-        analogWrite(PIN_RIGHT, STOP);
+        speed_y = STOP;
+        speed_x = STOP;
+        dir_x = DIRECTION_NEUTRAL;
+        dir_x = DIRECTION_CENTER;
         break;
     }
 
