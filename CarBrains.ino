@@ -1,9 +1,9 @@
 /*
   CarBrains - This is to control an RC car using the RX-2 Chip.
-  See README.md for Wiring
-  
-  Author: Adam Freeman
-*/
+ See README.md for Wiring
+ 
+ Author: Adam Freeman
+ */
 #define PIN_FORWARD 10
 #define PIN_BACKWARD 11
 #define PIN_LEFT 12
@@ -52,26 +52,30 @@ void loop() {
     // Forward 
     analogWrite(PIN_FORWARD, speed_y);
     analogWrite(PIN_BACKWARD, STOP);
-  } else if (dir_y == DIRECTION_BACKWARD) {
+  } 
+  else if (dir_y == DIRECTION_BACKWARD) {
     // Backward
     analogWrite(PIN_FORWARD, STOP);
     analogWrite(PIN_BACKWARD, speed_y);    
-  } else {
+  } 
+  else {
     // Stopped
     analogWrite(PIN_FORWARD, STOP);
     analogWrite(PIN_BACKWARD, STOP);
   }
-  
+
   // Set y direction and speed.
   if(dir_x == DIRECTION_LEFT) {
     // Forward 
     analogWrite(PIN_RIGHT, STOP);
     analogWrite(PIN_LEFT, speed_x);
-  } else if (dir_x == DIRECTION_RIGHT) {
+  } 
+  else if (dir_x == DIRECTION_RIGHT) {
     // Backward
     analogWrite(PIN_RIGHT, speed_x);
     analogWrite(PIN_LEFT, STOP);    
-  } else {
+  } 
+  else {
     // Stopped
     analogWrite(PIN_RIGHT, STOP);
     analogWrite(PIN_LEFT, STOP);
@@ -87,43 +91,67 @@ void serialEvent() {
     char inChar = (char)Serial.read();
 
     switch (inChar) {
-      case 'w':
-        // Go Forward
-        speed_y = HALF_SPEED;
-        dir_y = DIRECTION_FORWARD;
-        break;
+    case 'w':
+      // Go Forward
+      speed_y = HALF_SPEED;
+      dir_y = DIRECTION_FORWARD;
 
-      case 's':
-        // Go Backward
-        speed_y = HALF_SPEED;
-        dir_y = DIRECTION_BACKWARD;
-        break;
+      speed_x = STOP;
+      dir_x = DIRECTION_CENTER;
+      break;
 
-      case 'a':
-        // Go Forward
-        speed_x = HALF_SPEED;
-        dir_x = DIRECTION_LEFT;
-        break;
+    case 's':
+      // Go Backward
+      speed_y = HALF_SPEED;
+      dir_y = DIRECTION_BACKWARD;
 
-      case 'd':
-        // Go Backward
-        speed_x = HALF_SPEED;
-        dir_x = DIRECTION_RIGHT;
-        break;
+      speed_x = STOP;
+      dir_x = DIRECTION_CENTER;
+      break;
 
-      case 'f':
-        // Stop
-        speed_y = STOP;
-        speed_x = STOP;
-        dir_x = DIRECTION_NEUTRAL;
-        dir_x = DIRECTION_CENTER;
-        break;
+    case 'a':
+      // Go Forward
+      speed_x = HALF_SPEED;
+      dir_x = DIRECTION_LEFT;
+      break;
+
+    case 'd':
+      // Go Backward
+      speed_x = FULL_SPEED;
+      dir_x = DIRECTION_RIGHT;
+      break;
+
+    case 'f':
+      // Stop
+      speed_y = STOP;
+      speed_x = STOP;
+      dir_x = DIRECTION_NEUTRAL;
+      dir_x = DIRECTION_CENTER;
+      break;
+
+      // Change y speed         
+    case 'q':
+      // Increase y speed
+      speed_y += 50;
+      if(speed_y > 250) {
+        speed_y = 250;  
+      }
+      break;
+
+    case 'z':
+      // Decrease y speed
+      speed_y -= 50;
+      if(speed_y < 0) {
+        speed_y = 0;  
+      }
+      break;
     }
-
     if (inChar == '\n') {
       serial_part = 0;
-    } else {
+    } 
+    else {
       serial_part++;
     }
   }
 }
+
