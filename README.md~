@@ -73,30 +73,7 @@ The Right stick will control left/right and when centered will center the wheels
 
 ### Next
 
-The RC car wiring has changed again (sigh, yes I know). When I get a bit of time then I will got back and fix up the previous releases to have the wiring so it doesn't change all the time.
+Next time I'm planning to add the RF modules.
 
-Wiring to the RC car, note this has been changed since the previous release.
-
-| Arduino | Wire     | RC Pin        	  |
-| ------- | -------- | -------       	  |
-| VCC     | Red      | RF - VCC (1 or 2)  |
-| GND     | Black    | RF - GND (9 or 10) |
-| 12      | Blue     | RF - CE  (5) 	  |
-| 11      | Grey     | RF - SCK  (7)  	  |
-| 10      | Green    | RF - CSN  (6)  	  |
-| 9       | Yellow   | RF - CE  (3) 	  |
-| 8       | Orange   | RF - CSN  (4)  	  |
-| 5       | Yellow   | RC - Forward  (11) |
-| 4       | Orange   | RC - Backward (10) |
-| 3       | Green    | RC - Left  (7)     |
-| 2       | Blue     | RC - Right (6)     |
-| GND     | Black    | RC - GND (2)       |
- 
-
-
-References
-----------
-
-Info about the PS2 Library can be found here:
-
+Info from:
 http://www.billporter.info/2010/06/05/playstation-2-controller-arduino-library-v1-0/
