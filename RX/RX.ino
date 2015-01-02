@@ -8,10 +8,10 @@
 /*
  * Defines for motor control
  */
-#define PIN_FORWARD 10
-#define PIN_BACKWARD 9
-#define PIN_LEFT 6
-#define PIN_RIGHT 5
+#define PIN_FORWARD 10 // Yellow
+#define PIN_BACKWARD 9 // Orange
+#define PIN_LEFT 6 // Green
+#define PIN_RIGHT 5 // Blue
 
 #define STOP 0
 #define SLOW 50
@@ -44,6 +44,8 @@ RF24 radio(8,7);
 const uint64_t pipes[2] = { 
   0xF0F0F0F0E1LL, 0xF0F0F0F0D2LL };
 
+
+int lastInstruction = 0;
 void setup() {
   Serial.begin(115200);
 
@@ -133,21 +135,30 @@ void loop() {
       delay(20);
     }
     
-  }  
+  }
+
+  // Safety, stop if no comms in awhile
+  if(lastInstruction > 200) {
+      Serial.println("Halting due to suspected loss of comms");
+      processControlChar('f');
+  } else {
+    lastInstruction++;
+  } 
 }
 
 void serialEvent() {
 
   while (Serial.available()) {
     char inChar = (char)Serial.read();
-
+    Serial.println("Processing Serial command" + inChar);
     processControlChar(inChar);
 
   }
 }
 
 void processControlChar(char inChar) {
-  Serial.println(inChar);
+  Serial.print("Processed:" + inChar);
+  Serial.println(";");
     switch (inChar) {
     case 'w':
       // Go Forward
@@ -156,6 +167,9 @@ void processControlChar(char inChar) {
 
       speed_x = STOP;
       dir_x = DIRECTION_CENTER;
+      
+      Serial.println("Going forward");
+      
       break;
 
     case 's':
@@ -171,13 +185,13 @@ void processControlChar(char inChar) {
       break;
 
     case 'a':
-      // Go Forward
-      speed_x = HALF_SPEED;
+      // Go Left
+      speed_x = FULL_SPEED;
       dir_x = DIRECTION_LEFT;
       break;
 
     case 'd':
-      // Go Backward
+      // Go Right
       speed_x = FULL_SPEED;
       dir_x = DIRECTION_RIGHT;
       break;
@@ -206,5 +220,11 @@ void processControlChar(char inChar) {
         speed_y = 0;  
       }
       break;
+      
+      default:
+        Serial.println("Unknown command " + inChar);
+      break;
     }
+    
+    lastInstruction = 0;
 }

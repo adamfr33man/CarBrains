@@ -24,10 +24,10 @@ boolean ps2_stickmode = false;
 /*
  * Defines for motor control
  */
-#define PIN_FORWARD 5
-#define PIN_BACKWARD 4
-#define PIN_LEFT 3
-#define PIN_RIGHT 2
+#define PIN_FORWARD 10
+#define PIN_BACKWARD 9
+#define PIN_LEFT 11
+#define PIN_RIGHT 12
 
 #define STOP 0
 #define SLOW 50
